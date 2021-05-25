@@ -1,17 +1,35 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import createStore, { getHistory } from "./store";
+import { Provider } from "react-redux";
+import { ConnectedRouter } from "connected-react-router";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { initAuthentication } from "./utils/auth";
+import Landing from "./pages/Landing";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+async function main() {
+  const { isLogin } = await initAuthentication();
+  console.log("init")
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+  let componentToLoad = <Landing />;
+  if (isLogin) {
+    componentToLoad = <App history={getHistory()} />;
+  }
+
+  const store = createStore();
+  ReactDOM.render(
+    <Provider store={store}>
+      <CssBaseline />
+      <ConnectedRouter history={getHistory()}>
+        {componentToLoad}
+      </ConnectedRouter>
+    </Provider>,
+    document.getElementById("root")
+  );
+}
+
+if (window === window.top) {
+  main();
+}
