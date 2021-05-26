@@ -13,7 +13,7 @@ import { useDispatch } from "react-redux";
 import { userSignIn } from "../actions/user";
 import useToken from "../hooks/useToken";
 import { Loader } from "../components/Loader";
-import { Box, useTheme } from "@material-ui/core";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -41,7 +41,7 @@ export default function Signin() {
   const [login, setLogin] = useState(false);
   const { setToken } = useToken();
   const { error, setError } = useState(undefined);
-  const theme = useTheme();
+  // const theme = useTheme();
 
   const initalValues = {
     username: "",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import { TextField } from "formik-material-ui";
 import Grid from "@material-ui/core/Grid";
@@ -15,7 +15,7 @@ import ColorPicker from "material-ui-color-picker";
 // import qr from "../components/assets/tenor.gif";
 import QRCode from "qrcode.react";
 import { FormControl, InputLabel, MenuItem, Paper, Select } from "@material-ui/core";
-import { listUrl, updateUrl } from "../actions/urls";
+import { updateUrl } from "../actions/urls";
 // import { element } from "prop-types";
 import { useSelector } from "react-redux";
 
