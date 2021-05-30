@@ -9,24 +9,19 @@ import {
   Link,
   MenuItem,
   fade,
-  Grid,
-  Avatar,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useState, useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import dashboard from "./assets/dashboard1.jpg";
-import qr from "./assets/qr.jpg";
-import Footer from "./Footer";
 
 const headersData = [
   {
     label: "Home",
-    href: "/home",
+    href: "/",
   },
   {
     label: "Features",
-    href: "/features",
+    href: "/#features",
   },
   {
     label: "Register",
@@ -209,19 +204,6 @@ export default function LandingHeader() {
     menuButton,
     toolbar,
     drawerContainer,
-    bodyClass,
-    css1,
-    cssFont1,
-    cssFont2,
-    cssButton1,
-    imgCss1,
-    cssFontHeading,
-    cssFontFeature,
-    cssBox1,
-    cssFontBox,
-    cssBoxAvatar,
-    cssBoxFooter,
-    imgCss2,
   } = useStyles();
 
   const [state, setState] = useState({
@@ -330,106 +312,10 @@ export default function LandingHeader() {
   };
 
   return (
-    <>
       <header>
         <AppBar className={header}>
           {mobileView ? displayMobile() : displayDesktop()}
         </AppBar>
       </header>
-      <div className={bodyClass}>
-        <Grid container>
-          <Grid item xs={6}>
-            <div className={css1}>
-              <Typography variant="h2" className={cssFont1}>
-                The QR code for all your business needs
-              </Typography>
-            </div>
-            <div className={css1}>
-              <Typography variant="h6" className={cssFont2}>
-                This platform creates QR codes and short urls with multiple
-                featues
-              </Typography>
-            </div>
-            <div className={css1}>
-              <Typography variant="body1" className={cssFont2}>
-                Contact us for more benfits
-              </Typography>
-            </div>
-            <div className={css1}>
-              <Button className={cssButton1}> Contact us</Button>
-            </div>
-          </Grid>
-          <Grid item xs={6}>
-            <img src={dashboard} className={imgCss1} alt="dashboard"></img>
-          </Grid>
-        </Grid>
-        <Grid container justify="center" spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="h6" className={cssFontFeature}>
-              Features
-            </Typography>
-            <Typography variant="h2" className={cssFontHeading}>
-              Features have in our platform
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <img src={qr} className={imgCss2} alt="qr"></img>
-          </Grid>
-          <Grid item xs={6}>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <div className={cssBox1}>
-                  <Avatar className={cssBoxAvatar}>C</Avatar>
-                  <Typography variant="h6" className={cssFontBox}>
-                    Colors
-                  </Typography>
-                  <Typography variant="body1" className={cssBoxFooter}>
-                    Customize QR code at different colors
-                  </Typography>
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <div className={cssBox1}>
-                  <Avatar className={cssBoxAvatar}>D</Avatar>
-                  <Typography variant="h6" className={cssFontBox}>
-                    Downloads
-                  </Typography>
-                  <Typography variant="body1" className={cssBoxFooter}>
-                    Download different types of images (JPG, PNG, SVG)
-                  </Typography>
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <div className={cssBox1}>
-                  <Avatar className={cssBoxAvatar}>C</Avatar>
-                  <Typography variant="h6" className={cssFontBox}>
-                    Colors
-                  </Typography>
-                  <Typography variant="body1" className={cssBoxFooter}>
-                    Customize QR code at different colors
-                  </Typography>
-                </div>
-              </Grid>
-              <Grid item xs={6}>
-                <div className={cssBox1}>
-                  <Avatar className={cssBoxAvatar}>C</Avatar>
-                  <Typography variant="h6" className={cssFontBox}>
-                    Colors
-                  </Typography>
-                  <Typography variant="body1" className={cssBoxFooter}>
-                    Customize QR code at different colors
-                  </Typography>
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid container>
-            <Grid item xs={12}>
-             <Footer></Footer>
-            </Grid>
-        </Grid>
-      </div>
-    </>
   );
 }

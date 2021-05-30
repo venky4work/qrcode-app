@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
-import { lighten, makeStyles } from "@material-ui/core/styles";
+import {
+  createStyles,
+  fade,
+  lighten,
+  makeStyles,
+  withStyles,
+} from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -13,15 +19,17 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-// import Checkbox from "@material-ui/core/Checkbox";
 import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { useDispatch, useSelector } from "react-redux";
 import { listUrl } from "../actions/urls";
-// import { useHistory } from "react-router";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
+import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
+import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
 import { push } from "connected-react-router";
+import QrCode from "qrcode.react";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -50,7 +58,6 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  // { id: 'id', numeric: false, disablePadding: true, label: 'id' },
   { id: "url", numeric: false, disablePadding: false, label: "URL" },
   { id: "title", numeric: false, disablePadding: false, label: "Title" },
   {
@@ -59,33 +66,42 @@ const headCells = [
     disablePadding: false,
     label: "Short URL",
   },
+  {
+    id: "created_at",
+    numeric: false,
+    disablePadding: false,
+    label: "Created",
+  },
 ];
 
+const StyledTableSortLabel = withStyles((theme) =>
+  createStyles({
+    root: {
+      color: "white",
+      "&:hover": {
+        color: "white",
+      },
+      "&$active": {
+        color: "white",
+      },
+    },
+    active: {},
+    icon: {
+      color: "inherit !important",
+    },
+  })
+)(TableSortLabel);
+
 function EnhancedTableHead(props) {
-  const {
-    classes,
-    // onSelectAllClick,
-    order,
-    orderBy,
-    // numSelected,
-    // rowCount,
-    onRequestSort,
-  } = props;
+  const { classes, order, orderBy, onRequestSort } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
 
   return (
-    <TableHead>
+    <TableHead className={classes.tableHead}>
       <TableRow>
-        {/* <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{ "aria-label": "select all desserts" }}
-          />
-        </TableCell> */}
+        <TableCell className={classes.tableFontColor}></TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
@@ -93,20 +109,24 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? "none" : "default"}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
+            <StyledTableSortLabel
               active={orderBy === headCell.id}
+              IconComponent={ArrowDropDown}
               direction={orderBy === headCell.id ? order : "asc"}
               onClick={createSortHandler(headCell.id)}
             >
-              {headCell.label}
+              <Typography className={classes.tableFontColor}>
+                {headCell.label}
+              </Typography>
               {orderBy === headCell.id ? (
                 <span className={classes.visuallyHidden}>
                   {order === "desc" ? "sorted descending" : "sorted ascending"}
                 </span>
               ) : null}
-            </TableSortLabel>
+            </StyledTableSortLabel>
           </TableCell>
         ))}
+        <TableCell className={classes.tableFontColor}>Action</TableCell>
       </TableRow>
     </TableHead>
   );
@@ -114,12 +134,12 @@ function EnhancedTableHead(props) {
 
 EnhancedTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-  numSelected: PropTypes.number.isRequired,
+  // numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
+  // onSelectAllClick: PropTypes.func.isRequired,
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
+  // rowCount: PropTypes.number.isRequired,
 };
 
 const useToolbarStyles = makeStyles((theme) => ({
@@ -189,9 +209,9 @@ const EnhancedTableToolbar = (props) => {
   );
 };
 
-EnhancedTableToolbar.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-};
+// EnhancedTableToolbar.propTypes = {
+//   numSelected: PropTypes.number.isRequired,
+// };
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -203,6 +223,28 @@ const useStyles = makeStyles((theme) => ({
   },
   table: {
     minWidth: 750,
+  },
+  tableHead: {
+    backgroundColor: fade(theme.palette.secondary.main, 0.75),
+  },
+  tableFontColor: {
+    color: fade(theme.palette.primary.contrastText, 0.95),
+    textAlign: "center",
+    fontWeight: "400",
+    lineHeight: "0.5rem",
+    margin: "2px",
+  },
+  tableCellStyle: {
+    fontWeight: "300",
+    lineHeight: "1rem",
+    margin: "1px",
+    padding: "10px",
+  },
+  activeSortIcon: {
+    opacity: 1,
+  },
+  inactiveSortIcon: {
+    opacity: 0,
   },
   visuallyHidden: {
     border: 0,
@@ -220,17 +262,22 @@ const useStyles = makeStyles((theme) => ({
 export default function EnhancedTable() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("title");
-  const [selected, setSelected] = React.useState([]);
+  const [order, setOrder] = React.useState("desc");
+  const [orderBy, setOrderBy] = React.useState("created_at");
+  // const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
   useEffect(() => {
     dispatch(listUrl());
   }, [dispatch]);
+
   const { rows } = useSelector((state) => ({
-    rows: state.urls.results.length === 0 ? state.urls.results : state.urls.results.data ,
+    rows:
+      state.urls.results.length === 0
+        ? state.urls.results
+        : state.urls.results.data,
   }));
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -238,35 +285,12 @@ export default function EnhancedTable() {
     setOrderBy(property);
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.id);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
+  const handleClick = (event, id) => {
+    dispatch(push(`/detail/${id}`));
   };
 
-  const handleClick = (event, id) => {
-    // const selectedIndex = selected.indexOf(id);
-    dispatch(push(`/detail/${id}`));
-
-    // let newSelected = [];
-
-    // if (selectedIndex === -1) {
-    //   newSelected = newSelected.concat(selected, id);
-    // } else if (selectedIndex === 0) {
-    //   newSelected = newSelected.concat(selected.slice(1));
-    // } else if (selectedIndex === selected.length - 1) {
-    //   newSelected = newSelected.concat(selected.slice(0, -1));
-    // } else if (selectedIndex > 0) {
-    //   newSelected = newSelected.concat(
-    //     selected.slice(0, selectedIndex),
-    //     selected.slice(selectedIndex + 1)
-    //   );
-    // }
-
-    // setSelected(newSelected);
+  const handleEdit = (event, id) => {
+    dispatch(push(`/edit/${id}`));
   };
 
   const handleChangePage = (event, newPage) => {
@@ -278,7 +302,7 @@ export default function EnhancedTable() {
     setPage(0);
   };
 
-  const isSelected = (id) => selected.indexOf(id) !== -1;
+  // const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
@@ -286,49 +310,72 @@ export default function EnhancedTable() {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar />
         <TableContainer>
           <Table
             className={classes.table}
             aria-labelledby="tableTitle"
             size={dense ? "small" : "medium"}
-            aria-label="enhanced table"
+            aria-label="qr codes"
           >
             <EnhancedTableHead
               classes={classes}
-              numSelected={selected.length}
+              // numSelected={selected.length}
               order={order}
               orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
+              // onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              // rowCount={rows.length}
             />
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
-                  // const labelId = `enhanced-table-checkbox-${index}`;
-
+                .map((row) => {
+                  // const isItemSelected = isSelected(row.id);
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.id)}
+                      // onClick={(event) => handleClick(event, row.id)}
                       role="checkbox"
-                      aria-checked={isItemSelected}
+                      // aria-checked={isItemSelected}
                       tabIndex={-1}
                       key={row.id}
-                      selected={isItemSelected}
+                      // selected={isItemSelected}
                     >
-                      {/* <TableCell padding="checkbox">
-                        <Checkbox
-                          checked={isItemSelected}
-                          inputProps={{ "aria-labelledby": labelId }}
-                        />
-                      </TableCell> */}
-                      <TableCell align="left">{row.url}</TableCell>
-                      <TableCell align="left">{row.title}</TableCell>
-                      <TableCell align="left">{row.shortenurl}</TableCell>
+                      <TableCell className={classes.tableCellStyle}>
+                        <QrCode
+                          id="qrcode"
+                          value={row.url}
+                          renderAs="svg"
+                          // value=""
+                          size={15}
+                          // level={""}
+                          // bgColor={bgcolor}
+                          // fgColor={fgcolor}
+                        ></QrCode>
+                      </TableCell>
+                      <TableCell className={classes.tableCellStyle} align="left">{row.url}</TableCell>
+                      <TableCell className={classes.tableCellStyle} align="left">{row.title}</TableCell>
+                      <TableCell className={classes.tableCellStyle} align="left">{row.shortenurl}</TableCell>
+                      <TableCell className={classes.tableCellStyle} align="left">{row.created_at}</TableCell>
+                      <TableCell className={classes.tableCellStyle}>
+                        <Tooltip title="Edit">
+                          <IconButton
+                            aria-label="edit"
+                            onClick={(event) => handleEdit(event, row.id)}
+                          >
+                            <EditOutlinedIcon color="primary" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="View">
+                          <IconButton
+                            aria-label="view"
+                            onClick={(event) => handleClick(event, row.id)}
+                          >
+                            <VisibilityOutlinedIcon color="primary" />
+                          </IconButton>
+                        </Tooltip>
+                      </TableCell>
                     </TableRow>
                   );
                 })}

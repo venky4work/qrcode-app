@@ -7,13 +7,13 @@ import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { initAuthentication } from "./utils/auth";
-import Landing from "./pages/Landing";
+import UnAuthApp from "./UnAuthApp";
 
 async function main() {
   const { isLogin } = await initAuthentication();
   console.log("init")
 
-  let componentToLoad = <Landing />;
+  let componentToLoad = <UnAuthApp />;
   if (isLogin) {
     componentToLoad = <App history={getHistory()} />;
   }

@@ -14,7 +14,13 @@ import DescriptionIcon from "@material-ui/icons/Description";
 import ColorPicker from "material-ui-color-picker";
 // import qr from "../components/assets/tenor.gif";
 import QRCode from "qrcode.react";
-import { FormControl, InputLabel, MenuItem, Paper, Select } from "@material-ui/core";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+} from "@material-ui/core";
 import { updateUrl } from "../actions/urls";
 // import { element } from "prop-types";
 import { useSelector } from "react-redux";
@@ -50,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function DetailQr() {
+export default function DetailQr({ edit }) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
@@ -61,7 +67,7 @@ export default function DetailQr() {
   const [bgcolor, setBgColor] = useState("#FFFFFF");
   const [downloadType, setDownloadType] = useState("PNG");
   //   const [url, setUrl] = useState("");
-  const [edit, setEdit] = useState(false);
+  // const [edit, setEdit] = useState(false);
   const { data } = useSelector((state) => ({
     data:
       state.urls.results.length === 0
@@ -78,9 +84,9 @@ export default function DetailQr() {
     console.log(e.currentTarget.value);
     setValue(e.currentTarget.value);
   };
-  const handleEdit = () => {
-    setEdit(true);
-  };
+  // const handleEdit = () => {
+  //   setEdit(true);
+  // };
 
   const handleBgChange = (color) => {
     console.log(color);
@@ -249,7 +255,22 @@ export default function DetailQr() {
                 <Grid item xs={3}></Grid>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={3}>
-                  <Button
+                  {edit ? (
+                    <Button
+                      type={"submit"}
+                      fullWidth
+                      variant="contained"
+                      color="primary"
+                      className={classes.submit}
+                      disabled={isSubmitting}
+                      onClick={submitForm}
+                    >
+                      {"Update"}
+                    </Button>
+                  ) : (
+                    <></>
+                  )}
+                  {/* <Button
                     type={edit ? "button" : "submit"}
                     fullWidth
                     variant="contained"
@@ -259,7 +280,7 @@ export default function DetailQr() {
                     onClick={edit ? submitForm : handleEdit}
                   >
                     {!edit ? "Edit" : "Update"}
-                  </Button>
+                  </Button> */}
                 </Grid>
               </Grid>
             </Form>
@@ -275,7 +296,7 @@ export default function DetailQr() {
             <Grid item xs={6}>
               <QRCode
                 id="qrcode"
-                value={data ? data.shortenurl : " " }
+                value={data ? data.shortenurl : " "}
                 // value=""
                 size={290}
                 level={"H"}
@@ -285,7 +306,7 @@ export default function DetailQr() {
               ></QRCode>
             </Grid>
             <Grid item xs={6}>
-              <FormControl variant="outlined" className={classes.formControl} >
+              <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel id="demo-simple-select-outlined-label">
                   Type
                 </InputLabel>

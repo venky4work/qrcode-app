@@ -13,17 +13,26 @@ import { useDispatch } from "react-redux";
 import { userSignIn } from "../actions/user";
 import useToken from "../hooks/useToken";
 import { Loader } from "../components/Loader";
-import { Box } from "@material-ui/core";
+import { Box, fade, useTheme } from "@material-ui/core";
+import LandingHeader from "../components/LandningHeader";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    margin: theme.spacing(2),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    // marginBottom: theme.spacing(1),
+  },
+  loader: {
+    margin: "50%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    // marginBottom: theme.spacing(1),
   },
   avatar: {
-    margin: theme.spacing(1),
+    margin: theme.spacing(2),
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
@@ -33,14 +42,22 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  mainClass: {
+    padding: "2%",
+    marginTop: "10%",
+    boxShadow: "rgb(13 13 13 / 25%) 0px 3px 6px 0px",
+    transition: "box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+    borderRadius: "7%",
+  },
 }));
 
 export default function Signin() {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [login, setLogin] = useState(false);
+  const theme = useTheme();
   const { setToken } = useToken();
-  const { error, setError } = useState(undefined);
+  const [msg, setMsg] = useState(false);
   // const theme = useTheme();
 
   const initalValues = {
@@ -50,90 +67,110 @@ export default function Signin() {
 
   const onSubmit = async (values) => {
     setLogin(true);
+    setMsg(false);
     const data = await dispatch(userSignIn(values));
-    if(data.payload.token) {
+    if (data.payload.token) {
       setToken(data.payload.token);
       var rootLocation = window.location.origin;
-      setLogin(false);
       window.location.replace(rootLocation);
     } else {
       setLogin(false);
       console.log(data.payload.message);
-      setError(data.payload.message);
+      setMsg(true);
     }
   };
 
   return login ? (
     <Container component="main" maxWidth="xs">
-    <div className={classes.paper}>
-      <Loader></Loader>
-    </div>
-    </Container>
-  ) : (
-    <Container component="main" maxWidth="xs">
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box bgcolor="error.main" color="error.contrastText" p={1}>
-          {error}
-        </Box>
-        <Formik
-          initialValues={initalValues}
-          onSubmit={onSubmit}
-          validateOnChange={false}
-          validateOnBlur={false}
-          validateOnMount={false}
-        >
-          {({ isSubmitting, submitForm }) => (
-            <Form className={classes.form}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Field
-                    component={TextField}
-                    name="username"
-                    fullWidth
-                    variant="outlined"
-                    label="User Name"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    name="password"
-                    component={TextField}
-                    variant="outlined"
-                    fullWidth
-                    label="Password"
-                    type="password"
-                  />
-                </Grid>
-              </Grid>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                disabled={isSubmitting}
-                onClick={submitForm}
-              >
-                Sign In
-              </Button>
-              <Grid container justify="flex-end">
-                <Grid item xs={6}>
-                  <Link to="/"> Back </Link>
-                </Grid>
-                <Grid item xs={6}>
-                  <Link to="/signup"> Register </Link>
-                </Grid>
-              </Grid>
-            </Form>
-          )}
-        </Formik>
+      <div className={classes.loader}>
+        <Loader></Loader>
       </div>
     </Container>
+  ) : (
+    <>
+      <LandingHeader></LandingHeader>
+      <Container component="main" maxWidth="xs" className={classes.mainClass}>
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Welcome!
+          </Typography>
+          <Typography variant="body1" align="center">
+            Use these QR codes to login or create new account in your business
+            for free.
+          </Typography>
+          {msg ? (
+            <Box
+              bgcolor={fade(theme.palette.error.main, 0.9)}
+              color="error.contrastText"
+              p={1}
+              width="100%"
+            >
+              <Typography align="center">Invalid username/password</Typography>
+            </Box>
+          ) : (
+            <></>
+          )}
+          <Formik
+            initialValues={initalValues}
+            onSubmit={onSubmit}
+            validateOnChange={false}
+            validateOnBlur={false}
+            validateOnMount={false}
+          >
+            {({ isSubmitting, submitForm }) => (
+              <Form className={classes.form}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Field
+                      component={TextField}
+                      name="username"
+                      fullWidth
+                      variant="outlined"
+                      label="User Name"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Field
+                      name="password"
+                      component={TextField}
+                      variant="outlined"
+                      fullWidth
+                      label="Password"
+                      type="password"
+                    />
+                  </Grid>
+                </Grid>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={classes.submit}
+                  disabled={isSubmitting}
+                  onClick={submitForm}
+                >
+                  Sign In
+                </Button>
+                <Grid container justify="flex-end">
+                  <Grid item xs={6}>
+                    <Link to="/">
+                      <Typography>Back</Typography>
+                    </Link>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Link to="/signup">
+                      <Typography align="right"> Register</Typography>
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </Container>
+    </>
   );
 }

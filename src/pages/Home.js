@@ -70,7 +70,10 @@ export default function Home() {
               <CreateQr> </CreateQr>
             </Route>
             <Route path="/detail/:id">
-              <DetailQr> </DetailQr>
+              <DetailQr edit={false}> </DetailQr>
+            </Route>
+            <Route path="/edit/:id">
+              <DetailQr edit={true}> </DetailQr>
             </Route>
           </Switch>
         </Grid>

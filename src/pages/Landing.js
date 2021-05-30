@@ -4,9 +4,12 @@ import LandingHeader from "../components/LandningHeader";
 import { Route, Switch } from "react-router-dom";
 import SignIn from "./SignIn";
 import SignUp from "./SingUp";
+import LandingMain from "../components/LandingMain";
+import Footer from "../components/Footer";
 const useStyles = makeStyles(() => ({
   root: {
     display: "flex",
+    // background: 'linear-gradient(to right bottom, #ffffff, #3f51b5d9)',
   },
 }));
 
@@ -22,7 +25,11 @@ const Landing = () => {
           <SignUp />
         </Route>
         <Route path="/">
-          <LandingHeader />
+          <div>
+            <LandingHeader />
+            <LandingMain></LandingMain>
+            <Footer></Footer>
+          </div>
         </Route>
         <Route>
           <p>404 Not found</p>

@@ -89,7 +89,7 @@ const SideNav = ({ open, setOpen }) => {
             <Toolbar>
                 <img src={logo} alt='test' className={classes.image} />
                 <Typography variant='h6' color='primary'>
-                  QR Generator
+                  QGEN
                 </Typography>
             </Toolbar>
             <Divider />
