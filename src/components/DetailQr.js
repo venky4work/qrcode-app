@@ -65,7 +65,7 @@ export default function DetailQr({ edit }) {
   const [value, setValue] = useState("Link");
   const [fgcolor, setFgColor] = useState("#000000");
   const [bgcolor, setBgColor] = useState("#FFFFFF");
-  const [downloadType, setDownloadType] = useState("PNG");
+  const [downloadType, setDownloadType] = useState("JPG");
   //   const [url, setUrl] = useState("");
   // const [edit, setEdit] = useState(false);
   const { data } = useSelector((state) => ({
@@ -84,9 +84,10 @@ export default function DetailQr({ edit }) {
     console.log(e.currentTarget.value);
     setValue(e.currentTarget.value);
   };
-  // const handleEdit = () => {
-  //   setEdit(true);
-  // };
+  const handleEdit = () => {
+    // setEdit(true);
+    history.push(`/edit/${id}`);
+  };
 
   const handleBgChange = (color) => {
     console.log(color);
@@ -107,6 +108,7 @@ export default function DetailQr({ edit }) {
   };
 
   const handleType = (e) => {
+    setBgColor("transparent");
     setDownloadType(e.target.value);
   };
 
@@ -214,48 +216,14 @@ export default function DetailQr({ edit }) {
                     variant="outlined"
                     fullWidth
                     label="Short URL"
-                    disabled={!edit}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <ColorPicker
-                    name="color1"
-                    value={bgcolor}
-                    onChange={(color) => handleBgChange(color)}
-                    TextFieldProps={{
-                      value: bgcolor,
-                      variant: "outlined",
-                      // className: classes.formInput,
-                      label: "Backgroud Color",
-                      helperText: "Choose a color",
-                    }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <ColorPicker
-                    name="color2"
-                    value={fgcolor}
-                    onChange={(color) => handleFgChange(color)}
-                    TextFieldProps={{
-                      value: fgcolor,
-                      variant: "outlined",
-                      // className: classes.formInput,
-                      label: "Foreground Color",
-                      helperText: "Choose a color",
-                    }}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
+                    disabled
                   />
                 </Grid>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={3}></Grid>
                 <Grid item xs={3}>
-                  {edit ? (
+                  {/* {edit ? (
                     <Button
                       type={"submit"}
                       fullWidth
@@ -269,8 +237,8 @@ export default function DetailQr({ edit }) {
                     </Button>
                   ) : (
                     <></>
-                  )}
-                  {/* <Button
+                  )} */}
+                  <Button
                     type={edit ? "button" : "submit"}
                     fullWidth
                     variant="contained"
@@ -280,7 +248,7 @@ export default function DetailQr({ edit }) {
                     onClick={edit ? submitForm : handleEdit}
                   >
                     {!edit ? "Edit" : "Update"}
-                  </Button> */}
+                  </Button>
                 </Grid>
               </Grid>
             </Form>
@@ -321,6 +289,44 @@ export default function DetailQr({ edit }) {
                   <MenuItem value={"PNG"}>PNG</MenuItem>
                 </Select>
               </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <ColorPicker
+                    name="color1"
+                    value={bgcolor}
+                    onChange={(color) => handleBgChange(color)}
+                    TextFieldProps={{
+                      value: bgcolor,
+                      variant: "outlined",
+                      // className: classes.formInput,
+                      label: "Backgroud Color",
+                      helperText: "Choose a color",
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <ColorPicker
+                    name="color2"
+                    value={fgcolor}
+                    onChange={(color) => handleFgChange(color)}
+                    TextFieldProps={{
+                      value: fgcolor,
+                      variant: "outlined",
+                      // className: classes.formInput,
+                      label: "Foreground Color",
+                      helperText: "Choose a color",
+                    }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
             <Grid item xs={3}>
               <Button

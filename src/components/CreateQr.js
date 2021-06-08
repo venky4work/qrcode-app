@@ -50,6 +50,7 @@ export default function CreateQr() {
   const dispatch = useDispatch();
 
   const [value, setValue] = useState("Link");
+  // const [prefix, setPrefix] = useState("");
   const [fgcolor, setFgColor] = useState("#000000");
   const [bgcolor, setBgColor] = useState("#b9b8b8");
   const [url] = useState("");
@@ -169,11 +170,55 @@ export default function CreateQr() {
                     name="url"
                     component={TextField}
                     // onKeyUp ={handleUrlChange}
+                    // onChange={(e, value) =>
+                    //   setFieldValue("url", value === 'Youtube' ? "https://youtube.com" + e.target.value : e.target.value )
+                    // }
                     variant="outlined"
                     fullWidth
                     label="https://www.website.com"
                   />
                 </Grid>
+                <Grid item xs={3}></Grid>
+                <Grid item xs={3}></Grid>
+                <Grid item xs={3}></Grid>
+                <Grid item xs={3}>
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    disabled={isSubmitting}
+                    onClick={submitForm}
+                  >
+                    Create
+                  </Button>
+                </Grid>
+              </Grid>
+            </Form>
+          )}
+        </Formik>
+      </Grid>
+      <Grid item xs={6}>
+        <Paper className={classes.paper}>
+          <Grid container spacing={2} direction={"column"} alignItems="center">
+            <Grid item xs={3}>
+              <Typography variant="h6">Style Preview</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <QRCode
+                id="qrcode"
+                renderAs="svg"
+                value={url}
+                size={290}
+                level={"H"}
+                bgColor={bgcolor}
+                fgColor={fgcolor}
+                includeMargin={true}
+              ></QRCode>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container spacing={2}>
                 <Grid item xs={6}>
                   <ColorPicker
                     name="color1"
@@ -208,55 +253,7 @@ export default function CreateQr() {
                     }}
                   />
                 </Grid>
-                <Grid item xs={3}></Grid>
-                <Grid item xs={3}></Grid>
-                <Grid item xs={3}></Grid>
-                <Grid item xs={3}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    className={classes.submit}
-                    disabled={isSubmitting}
-                    onClick={submitForm}
-                  >
-                    Create
-                  </Button>
-                </Grid>
               </Grid>
-            </Form>
-          )}
-        </Formik>
-      </Grid>
-      <Grid item xs={6}>
-        <Paper className={classes.paper}>
-          <Grid container spacing={2} direction={'column'} alignItems="center">
-            <Grid item xs={3}>
-              <Typography variant="h6">Style Preview</Typography>
-            </Grid>
-            <Grid item xs={6}>
-              <QRCode
-                id="qrcode"
-                value={url}
-                size={290}
-                level={"H"}
-                bgColor={bgcolor}
-                fgColor={fgcolor}
-                includeMargin={true}
-              ></QRCode>
-            </Grid>
-            <Grid item xs={3}>
-            {/* <Typography variant="h6">QR will be generated with above styles</Typography> */}
-              {/* <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={downloadQR}
-              >
-                Download
-              </Button> */}
             </Grid>
           </Grid>
         </Paper>

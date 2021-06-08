@@ -1,54 +1,58 @@
-import React from 'react';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import { Box, Toolbar } from '@material-ui/core';
-import NotificationsActiveIcon from '@material-ui/icons/NotificationsActive';
-import UserMenu from './UserMenu';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import MenuIcon from '@material-ui/icons/Menu';
+import AppBar from "@material-ui/core/AppBar";
+import { Box, IconButton, Toolbar } from "@material-ui/core";
+import NotificationsActiveIcon from "@material-ui/icons/NotificationsActive";
+import UserMenu from "./UserMenu";
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
-    appBar: {
-        zIndex: theme.zIndex.drawer + 1,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-        }),
-        borderBottom: '1px dotted white'
+  appBar: {
+    [theme.breakpoints.up("sm")]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
     },
-    appBarShift: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-        borderBottom: '1px dotted white'
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
     },
-    icons: {
-        marginRight: 10,
-    }
+  },
+  icons: {
+    marginRight: 10,
+  },
 }));
 
-const Header = ({ open }) => {
-    const classes = useStyles();
-    return (
-        <AppBar
-            position="absolute"
-            elevation={0}
-            className={clsx(classes.appBar, {
-                [classes.appBarShift]: open,
-            })}
+const Header = ({ open, setOpen }) => {
+  const classes = useStyles();
+
+  const toggleNav = () => {
+    setOpen(!open);
+  };
+
+  return (
+    <AppBar position="fixed" className={classes.appBar} elevation={0}>
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={toggleNav}
+          className={classes.menuButton}
         >
-            <Toolbar>
-                <Box  display='flex' flexGrow={1}></Box>
-                <NotificationsActiveIcon className={classes.icons}/>
-                <UserMenu></UserMenu>
-            </Toolbar>
-        </AppBar>
-    );
-}
+          <MenuIcon />
+        </IconButton>
+        <Box display="flex" flexGrow={1}></Box>
+        <NotificationsActiveIcon className={classes.icons} />
+        <UserMenu></UserMenu>
+      </Toolbar>
+    </AppBar>
+  );
+};
 
 Header.defaultProps = {
-    open: true,
-}
+  open: true,
+  setOpen: () => {}
+};
 export default Header;

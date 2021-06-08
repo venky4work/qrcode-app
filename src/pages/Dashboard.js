@@ -7,7 +7,7 @@ const Dashboard = () => {
   const [open, setOpen] = React.useState(false);
   return (
     <>
-      <Header open={open}> </Header>
+      <Header open={open} setOpen={setOpen}> </Header>
       <SideNav open={open} setOpen={setOpen}></SideNav>
       <Main open={open}></Main>
     </>

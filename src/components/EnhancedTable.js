@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import {
@@ -24,7 +24,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { useDispatch, useSelector } from "react-redux";
-import { listUrl } from "../actions/urls";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import VisibilityOutlinedIcon from "@material-ui/icons/VisibilityOutlined";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
@@ -65,6 +64,12 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: "Short URL",
+  },
+  {
+    id: "visit",
+    numeric: true,
+    disablePadding: false,
+    label: "Visits",
   },
   {
     id: "created_at",
@@ -225,7 +230,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 750,
   },
   tableHead: {
-    backgroundColor: fade(theme.palette.secondary.main, 0.75),
+    backgroundColor: fade(theme.palette.primary.main, 0.95),
   },
   tableFontColor: {
     color: fade(theme.palette.primary.contrastText, 0.95),
@@ -268,10 +273,6 @@ export default function EnhancedTable() {
   const [page, setPage] = React.useState(0);
   const [dense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-  useEffect(() => {
-    dispatch(listUrl());
-  }, [dispatch]);
 
   const { rows } = useSelector((state) => ({
     rows:
@@ -348,7 +349,7 @@ export default function EnhancedTable() {
                           value={row.url}
                           renderAs="svg"
                           // value=""
-                          size={15}
+                          size={25}
                           // level={""}
                           // bgColor={bgcolor}
                           // fgColor={fgcolor}
@@ -357,6 +358,7 @@ export default function EnhancedTable() {
                       <TableCell className={classes.tableCellStyle} align="left">{row.url}</TableCell>
                       <TableCell className={classes.tableCellStyle} align="left">{row.title}</TableCell>
                       <TableCell className={classes.tableCellStyle} align="left">{row.shortenurl}</TableCell>
+                      <TableCell className={classes.tableCellStyle} align="right">{row.visit}</TableCell>
                       <TableCell className={classes.tableCellStyle} align="left">{row.created_at}</TableCell>
                       <TableCell className={classes.tableCellStyle}>
                         <Tooltip title="Edit">

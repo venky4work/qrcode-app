@@ -11,8 +11,6 @@ import UnAuthApp from "./UnAuthApp";
 
 async function main() {
   const { isLogin } = await initAuthentication();
-  console.log("init")
-
   let componentToLoad = <UnAuthApp />;
   if (isLogin) {
     componentToLoad = <App history={getHistory()} />;
