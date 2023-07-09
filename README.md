@@ -1,6 +1,6 @@
 # Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app). and Hosted in https://master.dat31ktt0xhje.amplifyapp.com/
 
 ## Available Scripts
 
